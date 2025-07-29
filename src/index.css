@@ -1,3 +1,8 @@
+/* Import Uber Move Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
 html,
 body,
 #root {
@@ -7,23 +12,17 @@ body,
   padding: 0;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', 'Uber Move', 'UberMove', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-    font-family: theme('fontFamily.sans');
-    font-size: 18px;
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  body {
-    @apply transition-colors duration-300;
-  }
+body {
+  transition: color 0.3s;
 }
 
 @layer utilities {

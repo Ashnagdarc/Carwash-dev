@@ -5,7 +5,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { useBookings } from '../../hooks/useBookings';
 import { useRevenueData } from '../../hooks/useRevenueData';
-import AdminLocationDashboard from './AdminLocationDashboard';
+
 import {
     BarChart3,
     Calendar,
@@ -24,7 +24,7 @@ const AdminDashboard = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('overview');
     const { bookings } = useBookings();
-    const { revenueData } = useRevenueData();
+    const { revenueData, loading: revenueLoading } = useRevenueData();
 
     // Get tab from URL query params
     useEffect(() => {
@@ -50,12 +50,12 @@ const AdminDashboard = () => {
 
     // Mock data for admin dashboard
     const stats = {
-        totalBookings: bookings.length,
+        totalBookings: Array.isArray(bookings) ? bookings.length : 0,
         totalRevenue: 125000,
         activeUsers: 45,
         averageRating: 4.8,
-        pendingBookings: bookings.filter(b => b.status === 'Pending').length,
-        completedBookings: bookings.filter(b => b.status === 'Completed').length
+        pendingBookings: Array.isArray(bookings) ? bookings.filter(b => b.status === 'Pending').length : 0,
+        completedBookings: Array.isArray(bookings) ? bookings.filter(b => b.status === 'Completed').length : 0
     };
 
     return (
@@ -76,8 +76,8 @@ const AdminDashboard = () => {
                                 key={tab.id}
                                 onClick={() => handleTabChange(tab.id)}
                                 className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === tab.id
-                                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
+                                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
                                     }`}
                             >
                                 <IconComponent className="h-4 w-4" />
@@ -146,15 +146,25 @@ const AdminDashboard = () => {
                             <Card className="p-6">
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue Trend</h3>
                                 <div className="h-64">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <LineChart data={revenueData}>
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="date" />
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} />
-                                        </LineChart>
-                                    </ResponsiveContainer>
+                                    {revenueLoading ? (
+                                        <div className="flex items-center justify-center h-full">
+                                            <p className="text-gray-500 dark:text-gray-400">Loading revenue data...</p>
+                                        </div>
+                                    ) : Array.isArray(revenueData) && revenueData.length > 0 ? (
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <LineChart data={revenueData}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="date" />
+                                                <YAxis />
+                                                <Tooltip />
+                                                <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} />
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full">
+                                            <p className="text-gray-500 dark:text-gray-400">No revenue data available</p>
+                                        </div>
+                                    )}
                                 </div>
                             </Card>
 
@@ -163,20 +173,20 @@ const AdminDashboard = () => {
                                 <Card className="p-6">
                                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Bookings</h3>
                                     <div className="space-y-3">
-                                        {bookings.slice(0, 5).map((booking) => (
+                                        {Array.isArray(bookings) ? bookings.slice(0, 5).map((booking) => (
                                             <div key={booking.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                                                 <div>
                                                     <p className="font-medium text-gray-900 dark:text-white">{booking.service}</p>
                                                     <p className="text-sm text-gray-500 dark:text-gray-400">{booking.car}</p>
                                                 </div>
                                                 <span className={`px-2 py-1 text-xs rounded-full ${booking.status === 'Completed'
-                                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                        : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                                    : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
                                                     }`}>
                                                     {booking.status}
                                                 </span>
                                             </div>
-                                        ))}
+                                        )) : null}
                                     </div>
                                 </Card>
 
@@ -209,7 +219,7 @@ const AdminDashboard = () => {
                         <Card className="p-6">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">All Bookings</h3>
                             <div className="space-y-3">
-                                {bookings.map((booking) => (
+                                {Array.isArray(bookings) ? bookings.map((booking) => (
                                     <div key={booking.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                                         <div>
                                             <p className="font-medium text-gray-900 dark:text-white">{booking.service}</p>
@@ -217,21 +227,24 @@ const AdminDashboard = () => {
                                         </div>
                                         <div className="text-right">
                                             <span className={`px-2 py-1 text-xs rounded-full ${booking.status === 'Completed'
-                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                    : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                                : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
                                                 }`}>
                                                 {booking.status}
                                             </span>
                                             <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">{booking.amount}</p>
                                         </div>
                                     </div>
-                                ))}
+                                )) : null}
                             </div>
                         </Card>
                     )}
 
                     {activeTab === 'analytics' && (
-                        <AdminLocationDashboard />
+                        <Card className="p-6">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Analytics Dashboard</h3>
+                            <p className="text-gray-600 dark:text-gray-400">Analytics features coming soon...</p>
+                        </Card>
                     )}
 
                     {activeTab === 'users' && (
