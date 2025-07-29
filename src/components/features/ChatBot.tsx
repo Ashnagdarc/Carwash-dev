@@ -117,8 +117,8 @@ export function ChatBot() {
                   >
                     <div
                       className={`max-w-xs px-3 py-2 rounded-lg text-sm ${message.sender === 'user'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-900'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-900'
                         }`}
                     >
                       {message.text}

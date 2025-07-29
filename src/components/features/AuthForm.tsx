@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Input } from '../ui/Input';
-import { Button } from '../ui/Button';
+import UberInput from '../ui/UberInput';
+import UberButton from '../ui/UberButton';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, User as UserIcon } from 'lucide-react';
+import { Mail, Lock, User as UserIcon, ArrowLeft } from 'lucide-react';
 
 const initialState = {
     firstName: '',
@@ -15,7 +15,7 @@ const initialState = {
 const AuthForm: React.FC = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [form, setForm] = useState(initialState);
-    const { user, loading, error, login, clearError } = useAuth();
+    const { user, login, loading, error, clearError } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,8 +24,7 @@ const AuthForm: React.FC = () => {
         }
     }, [user, navigate]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+    const handleChange = (name: string, value: string) => {
         setForm((prev) => ({ ...prev, [name]: value }));
         // Clear error when user starts typing
         if (error) {
@@ -40,7 +39,14 @@ const AuthForm: React.FC = () => {
             alert('Sign up functionality is not implemented yet. Please use the test credentials to log in.');
             return;
         } else {
-            await login(form.email, form.password);
+            try {
+                await login(form.email, form.password);
+                // Redirect to dashboard after successful login
+                navigate('/dashboard');
+            } catch (error) {
+                // Error is already handled by the login function
+                console.error('Login failed:', error);
+            }
         }
     };
 
@@ -51,134 +57,139 @@ const AuthForm: React.FC = () => {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-black flex-col">
+        <div className="min-h-screen bg-white font-uber flex items-center justify-center flex-col">
             <Link
                 to="/"
-                className="mb-6 text-gray-400 hover:text-blue-400 transition-colors text-sm font-medium flex items-center gap-1"
+                className="mb-8 text-body text-gray-600 hover:text-gray-900 transition-colors font-medium flex items-center space-x-2"
                 tabIndex={0}
             >
-                <span className="text-lg">←</span> Back to Home
+                <ArrowLeft className="h-5 w-5" />
+                <span>Back to Home</span>
             </Link>
-            <div className="w-full max-w-md rounded-3xl bg-[#181A20] p-10 shadow-2xl">
-                <div className="mb-8">
-                    <div className="text-xs font-semibold text-gray-400 tracking-widest mb-2">START FOR FREE</div>
-                    <h2 className="text-4xl font-extrabold text-white flex items-center gap-2">
-                        {isSignUp ? 'Create new account' : 'Welcome back'}
-                        <span className="text-blue-400 text-5xl leading-none">.</span>
-                    </h2>
-                    <div className="mt-2 text-sm text-gray-400">
-                        {isSignUp ? (
-                            <>
-                                Already A Member?{' '}
-                                <button
-                                    type="button"
-                                    className="text-blue-400 hover:underline font-medium"
-                                    onClick={handleToggle}
+
+            <div className="w-full max-w-md">
+                <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg">
+                    <div className="mb-8">
+                        <div className="text-caption font-semibold text-gray-500 tracking-wider mb-3">START FOR FREE</div>
+                        <h2 className="text-heading font-bold text-gray-900 flex items-center gap-2 mb-2">
+                            {isSignUp ? 'Create new account' : 'Welcome back'}
+                            <span className="text-blue-500 text-display leading-none">.</span>
+                        </h2>
+                        <div className="text-body text-gray-600">
+                            {isSignUp ? (
+                                <>
+                                    Already A Member?{' '}
+                                    <button
+                                        type="button"
+                                        className="text-blue-500 hover:text-blue-600 font-medium transition-colors"
+                                        onClick={handleToggle}
+                                        disabled={loading}
+                                    >
+                                        Log In
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    New here?{' '}
+                                    <button
+                                        type="button"
+                                        className="text-blue-500 hover:text-blue-600 font-medium transition-colors"
+                                        onClick={handleToggle}
+                                        disabled={loading}
+                                    >
+                                        Sign Up
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Test Credentials Info */}
+                    {!isSignUp && (
+                        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                            <h3 className="text-subheading font-semibold text-blue-900 mb-2">Test Credentials:</h3>
+                            <div className="text-body text-blue-800 space-y-1">
+                                <div><strong>Admin:</strong> admin@carwash.com / admin123</div>
+                                <div><strong>User:</strong> user@example.com / user123</div>
+                            </div>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {isSignUp && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <UberInput
+                                    label="First Name"
+                                    placeholder="Enter first name"
+                                    value={form.firstName}
+                                    onChange={(value) => handleChange('firstName', value)}
+                                    icon={<UserIcon className="w-4 h-4" />}
+                                    required
                                     disabled={loading}
-                                >
-                                    Log In
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                New here?{' '}
-                                <button
-                                    type="button"
-                                    className="text-blue-400 hover:underline font-medium"
-                                    onClick={handleToggle}
+                                />
+                                <UberInput
+                                    label="Last Name"
+                                    placeholder="Enter last name"
+                                    value={form.lastName}
+                                    onChange={(value) => handleChange('lastName', value)}
+                                    icon={<UserIcon className="w-4 h-4" />}
+                                    required
                                     disabled={loading}
-                                >
-                                    Sign Up
-                                </button>
-                            </>
+                                />
+                            </div>
                         )}
-                    </div>
+
+                        <UberInput
+                            label="Email Address"
+                            type="email"
+                            placeholder="Enter your email"
+                            value={form.email}
+                            onChange={(value) => handleChange('email', value)}
+                            icon={<Mail className="w-4 h-4" />}
+                            required
+                            disabled={loading}
+                        />
+
+                        <UberInput
+                            label="Password"
+                            type="password"
+                            placeholder="Enter your password"
+                            value={form.password}
+                            onChange={(value) => handleChange('password', value)}
+                            icon={<Lock className="w-4 h-4" />}
+                            required
+                            disabled={loading}
+                        />
+
+                        {error && (
+                            <div className="text-caption text-red-600 font-medium text-center p-3 bg-red-50 border border-red-200 rounded-xl">
+                                {error}
+                            </div>
+                        )}
+
+                        <div className="flex gap-4 pt-4">
+                            <UberButton
+                                type="button"
+                                variant="outline"
+                                size="md"
+                                onClick={handleToggle}
+                                disabled={loading}
+                                className="flex-1"
+                            >
+                                Change method
+                            </UberButton>
+                            <UberButton
+                                type="submit"
+                                variant="primary"
+                                size="md"
+                                disabled={loading}
+                                className="flex-1"
+                            >
+                                {loading ? (isSignUp ? 'Creating account...' : 'Logging in...') : isSignUp ? 'Create account' : 'Log in'}
+                            </UberButton>
+                        </div>
+                    </form>
                 </div>
-
-                {/* Test Credentials Info */}
-                {!isSignUp && (
-                    <div className="mb-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-                        <h3 className="text-blue-400 font-semibold mb-2">Test Credentials:</h3>
-                        <div className="text-sm text-gray-300 space-y-1">
-                            <div><strong>Admin:</strong> admin@carwash.com / admin123</div>
-                            <div><strong>User:</strong> user@example.com / user123</div>
-                        </div>
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    {isSignUp && (
-                        <div className="flex gap-4">
-                            <Input
-                                name="firstName"
-                                placeholder="First name"
-                                value={form.firstName}
-                                onChange={handleChange}
-                                autoComplete="given-name"
-                                required
-                                disabled={loading}
-                                icon={<UserIcon className="w-4 h-4" />}
-                                className="bg-[#23262F] text-white border-none focus:ring-2 focus:ring-blue-400"
-                            />
-                            <Input
-                                name="lastName"
-                                placeholder="Last name"
-                                value={form.lastName}
-                                onChange={handleChange}
-                                autoComplete="family-name"
-                                required
-                                disabled={loading}
-                                icon={<UserIcon className="w-4 h-4" />}
-                                className="bg-[#23262F] text-white border-none focus:ring-2 focus:ring-blue-400"
-                            />
-                        </div>
-                    )}
-                    <Input
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        value={form.email}
-                        onChange={handleChange}
-                        autoComplete="email"
-                        required
-                        disabled={loading}
-                        icon={<Mail className="w-4 h-4" />}
-                        className="bg-[#23262F] text-white border-none focus:ring-2 focus:ring-blue-400"
-                    />
-                    <Input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        value={form.password}
-                        onChange={handleChange}
-                        autoComplete={isSignUp ? 'new-password' : 'current-password'}
-                        required
-                        disabled={loading}
-                        icon={<Lock className="w-4 h-4" />}
-                        className="bg-[#23262F] text-white border-none focus:ring-2 focus:ring-blue-400"
-                    />
-                    {error && (
-                        <div className="text-red-400 text-sm font-medium text-center">{error}</div>
-                    )}
-                    <div className="flex gap-4 mt-2">
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            className="w-1/2 bg-[#23262F] text-white border-none hover:bg-gray-700"
-                            onClick={handleToggle}
-                            disabled={loading}
-                        >
-                            Change method
-                        </Button>
-                        <Button
-                            type="submit"
-                            className="w-1/2 bg-blue-500 hover:bg-blue-600 text-white font-bold"
-                            disabled={loading}
-                        >
-                            {loading ? (isSignUp ? 'Creating account...' : 'Logging in...') : isSignUp ? 'Create account' : 'Log in'}
-                        </Button>
-                    </div>
-                </form>
             </div>
         </div>
     );

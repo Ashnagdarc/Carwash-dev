@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { RevenueData } from '../components/dashboard/RevenueChart';
+
+// Define the interface locally since the import path doesn't exist
+export interface RevenueData {
+    date: string;
+    revenue: number;
+}
 
 export function useRevenueData() {
     const [revenueData, setRevenueData] = useState<RevenueData[]>([]);
@@ -15,9 +20,19 @@ export function useRevenueData() {
 
                 // Try to fetch from real API first
                 const response = await axios.get('/api/revenue');
-                setRevenueData(response.data);
-            } catch (err) {
-                console.log('API not available, using mock revenue data');
+
+                // Validate that the response is actually an array of revenue data
+                if (Array.isArray(response.data) && response.data.length > 0 &&
+                    typeof response.data[0] === 'object' &&
+                    'date' in response.data[0] && 'revenue' in response.data[0]) {
+                    setRevenueData(response.data);
+                } else {
+                    // If response is not valid revenue data (e.g., HTML), fall back to mock data
+                    console.log('API returned invalid data format, using mock revenue data');
+                    throw new Error('Invalid data format');
+                }
+            } catch {
+                console.log('API not available or returned invalid data, using mock revenue data');
                 // Fallback to mock data for development
                 const mockData: RevenueData[] = [
                     { date: '2024-01-01', revenue: 12000 },

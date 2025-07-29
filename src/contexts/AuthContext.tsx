@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
             setError(error instanceof Error ? error.message : 'Login failed');
             setUser(null);
+            throw error; // Re-throw the error so the calling component can handle it
         } finally {
             setLoading(false);
         }
