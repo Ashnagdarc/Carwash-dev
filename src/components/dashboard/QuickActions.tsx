@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from '../ui/Button';
 import { Card, CardHeader, CardContent } from '../ui/Card';
-import { Calendar, Car, Bell } from 'lucide-react';
+import { Calendar, Bell } from 'lucide-react';
+import { CarIcon } from '../ui/CarIcons';
 
 interface QuickActionsProps {
     onBookService?: () => void;
@@ -24,7 +25,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
                 Book New Service
             </Button>
             <Button variant="outline" className="w-full" size="lg" onClick={onAddVehicle}>
-                <Car className="h-5 w-5 mr-2" />
+                <CarIcon className="h-5 w-5 mr-2" />
                 Add Vehicle
             </Button>
             <Button variant="outline" className="w-full" size="lg" onClick={onNotificationSettings}>

@@ -1,26 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLocation as useRouterLocation, useNavigate } from 'react-router-dom';
-import UberCard from '../ui/UberCard';
 import UberButton from '../ui/UberButton';
-import UberBadge from '../ui/UberBadge';
 import UberModal from '../ui/UberModal';
+import UserDashboardOverview from './userDashboard/UserDashboardOverview';
+import UserDashboardBookings from './userDashboard/UserDashboardBookings';
+import UserDashboardVehicles from './userDashboard/UserDashboardVehicles';
+import UserDashboardProfile from './userDashboard/UserDashboardProfile';
 import {
+    Send,
+    User as UserIcon,
     Calendar,
-    Car,
-    Star,
-    MapPin,
-    User,
-    CheckCircle,
-    Plus,
-    MessageCircle,
-    Navigation,
-    Activity,
-    DollarSign,
-    TrendingUp,
-    Wallet,
-    Send
+    CheckCircle
 } from 'lucide-react';
+import { CarIcon } from '../ui/CarIcons';
 
 interface Booking {
     id: number;
@@ -184,10 +177,10 @@ export function UserDashboard() {
     };
 
     const tabs = [
-        { id: 'overview', label: 'My Service', icon: User },
+        { id: 'overview', label: 'My Service', icon: UserIcon },
         { id: 'bookings', label: 'Bookings', icon: Calendar },
-        { id: 'vehicles', label: 'Vehicles', icon: Car },
-        { id: 'profile', label: 'Profile', icon: User }
+        { id: 'vehicles', label: 'Vehicles', icon: CarIcon },
+        { id: 'profile', label: 'Profile', icon: UserIcon }
     ];
 
     // Mock data for current booking
@@ -253,522 +246,37 @@ export function UserDashboard() {
                 {/* Tab Content */}
                 <div className="space-y-10">
                     {activeTab === 'overview' && (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                            {/* Left Column */}
-                            <div className="lg:col-span-2 space-y-10">
-                                {/* My Stats */}
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                    <UberCard variant="default" padding="md">
-                                        <div className="text-center">
-                                            <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                                <Calendar className="h-6 w-6 text-blue-600" />
-                                            </div>
-                                            <p className="text-caption text-gray-600 mb-2">Total Bookings</p>
-                                            <p className="text-subheading font-bold text-gray-900">24</p>
-                                        </div>
-                                    </UberCard>
-
-                                    <UberCard variant="default" padding="md">
-                                        <div className="text-center">
-                                            <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                                <TrendingUp className="h-6 w-6 text-green-600" />
-                                            </div>
-                                            <p className="text-caption text-gray-600 mb-2">This Month</p>
-                                            <p className="text-subheading font-bold text-gray-900">3</p>
-                                        </div>
-                                    </UberCard>
-
-                                    <UberCard variant="default" padding="md">
-                                        <div className="text-center">
-                                            <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                                <DollarSign className="h-6 w-6 text-purple-600" />
-                                            </div>
-                                            <p className="text-caption text-gray-600 mb-2">Total Spent</p>
-                                            <p className="text-subheading font-bold text-gray-900">₦65,000</p>
-                                        </div>
-                                    </UberCard>
-
-                                    <UberCard variant="default" padding="md">
-                                        <div className="text-center">
-                                            <div className="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                                <Star className="h-6 w-6 text-yellow-600" />
-                                            </div>
-                                            <div className="flex items-center justify-center space-x-1 mb-2">
-                                                <p className="text-subheading font-bold text-gray-900">4.8</p>
-                                                <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                                            </div>
-                                            <p className="text-caption text-gray-600">My Rating</p>
-                                        </div>
-                                    </UberCard>
-                                </div>
-
-                                {/* Current Booking */}
-                                <UberCard variant="elevated" padding="lg">
-                                    <div className="flex justify-between items-start mb-6">
-                                        <h3 className="text-heading font-semibold text-gray-900">Current Booking</h3>
-                                        <UberBadge variant="success" size="md">
-                                            {currentBooking.status}
-                                        </UberBadge>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        {/* Service Details */}
-                                        <div className="space-y-4">
-                                            <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                                                <span className="text-body text-gray-600">Service Type:</span>
-                                                <span className="text-body font-semibold text-gray-900">{currentBooking.serviceType}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                                                <span className="text-body text-gray-600">Vehicle:</span>
-                                                <span className="text-body font-semibold text-gray-900">{currentBooking.vehicle}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                                                <span className="text-body text-gray-600">Price:</span>
-                                                <span className="text-body font-semibold text-gray-900">{currentBooking.price}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center py-3">
-                                                <span className="text-body text-gray-600">Estimated Time:</span>
-                                                <span className="text-body font-semibold text-gray-900">{currentBooking.estimatedTime}</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Service Progress */}
-                                        <div>
-                                            <h4 className="text-subheading font-semibold text-gray-900 mb-6">Service Progress</h4>
-                                            <div className="space-y-4">
-                                                {currentBooking.progress.map((step, index) => (
-                                                    <div key={index} className="flex items-center space-x-4">
-                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step.completed
-                                                            ? 'bg-green-500 text-white'
-                                                            : 'bg-gray-200 text-gray-400'
-                                                            }`}>
-                                                            {step.completed && <CheckCircle className="h-5 w-5" />}
-                                                        </div>
-                                                        <span className={`text-body ${step.completed
-                                                            ? 'text-gray-900 font-medium'
-                                                            : 'text-gray-500'
-                                                            }`}>
-                                                            {step.step}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </UberCard>
-
-                                {/* Quick Actions */}
-                                <UberCard variant="default" padding="lg">
-                                    <h3 className="text-heading font-semibold text-gray-900 mb-6">Quick Actions</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                        <UberButton
-                                            variant="primary"
-                                            size="md"
-                                            icon={<Calendar className="h-5 w-5" />}
-                                            className="w-full justify-start"
-                                            onClick={() => setShowBookingModal(true)}
-                                        >
-                                            Book New Service
-                                        </UberButton>
-                                        <UberButton
-                                            variant="outline"
-                                            size="md"
-                                            icon={<Plus className="h-5 w-5" />}
-                                            className="w-full justify-start"
-                                            onClick={() => setShowVehicleModal(true)}
-                                        >
-                                            Add Vehicle
-                                        </UberButton>
-                                        <UberButton
-                                            variant="outline"
-                                            size="md"
-                                            icon={<Wallet className="h-5 w-5" />}
-                                            onClick={() => navigate('/wallet')}
-                                            className="w-full justify-start"
-                                        >
-                                            Wallet
-                                        </UberButton>
-                                        <UberButton
-                                            variant="outline"
-                                            size="md"
-                                            icon={<MessageCircle className="h-5 w-5" />}
-                                            className="w-full justify-start"
-                                        >
-                                            Contact Support
-                                        </UberButton>
-                                    </div>
-                                </UberCard>
-
-                                {/* My Vehicles */}
-                                <UberCard variant="default" padding="lg">
-                                    <h3 className="text-heading font-semibold text-gray-900 mb-6">My Vehicles</h3>
-                                    <div className="space-y-4">
-                                        {vehicles.map((vehicle, index) => (
-                                            <div key={index} className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl">
-                                                <div className="flex items-center space-x-4">
-                                                    <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
-                                                        <Car className="h-6 w-6 text-blue-600" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-body font-semibold text-gray-900">{vehicle.name}</p>
-                                                        <p className="text-caption text-gray-600">{vehicle.licensePlate}</p>
-                                                    </div>
-                                                </div>
-                                                <span className="text-caption text-gray-500">{vehicle.lastService}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </UberCard>
-                            </div>
-
-                            {/* Right Column */}
-                            <div className="space-y-10">
-                                {/* Service Location */}
-                                <UberCard variant="default" padding="lg">
-                                    <div className="flex justify-between items-start mb-6">
-                                        <h3 className="text-heading font-semibold text-gray-900">Service Location</h3>
-                                        <div className="flex items-center space-x-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            <span className="text-caption text-gray-500">Last updated 1 min ago</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="relative h-48 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl mb-6">
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="text-center">
-                                                <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                                    <MapPin className="h-8 w-8 text-white" />
-                                                </div>
-                                                <p className="text-body font-semibold text-gray-900 mb-2">Service Location</p>
-                                                <p className="text-caption text-gray-600">123 Main Street, Lagos</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <UberButton
-                                        variant="outline"
-                                        size="md"
-                                        icon={<Navigation className="h-5 w-5" />}
-                                        className="w-full"
-                                    >
-                                        Update Location
-                                    </UberButton>
-                                </UberCard>
-
-                                {/* Recent Activity */}
-                                <UberCard variant="default" padding="lg">
-                                    <h3 className="text-heading font-semibold text-gray-900 mb-6">Recent Activity</h3>
-                                    <div className="space-y-4">
-                                        {recentActivity.map((activity, index) => (
-                                            <div key={index} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-2xl">
-                                                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${activity.type === 'success'
-                                                    ? 'bg-green-100'
-                                                    : 'bg-blue-100'
-                                                    }`}>
-                                                    <Activity className={`h-5 w-5 ${activity.type === 'success'
-                                                        ? 'text-green-600'
-                                                        : 'text-blue-600'
-                                                        }`} />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <p className="text-body font-medium text-gray-900">{activity.action}</p>
-                                                    <p className="text-caption text-gray-500">{activity.time}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </UberCard>
-                            </div>
-                        </div>
+                        <UserDashboardOverview
+                            currentBooking={currentBooking}
+                            vehicles={vehicles}
+                            recentActivity={recentActivity}
+                            setShowBookingModal={setShowBookingModal}
+                            setShowVehicleModal={setShowVehicleModal}
+                            navigate={navigate}
+                        />
                     )}
 
                     {activeTab === 'bookings' && (
-                        <div className="space-y-10">
-                            <UberCard variant="elevated" padding="lg">
-                                <h3 className="text-heading font-semibold text-gray-900 mb-6">My Bookings</h3>
-                                <div className="space-y-6">
-                                    {userBookings.length > 0 ? (
-                                        userBookings.map((booking) => (
-                                            <div key={booking.id} className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl">
-                                                <div className="flex items-center space-x-4">
-                                                    <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
-                                                        <Calendar className="h-6 w-6 text-blue-600" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-body font-semibold text-gray-900">
-                                                            {booking.service}
-                                                        </p>
-                                                        <p className="text-caption text-gray-600">
-                                                            {booking.carMake} {booking.carModel} • {booking.licensePlate}
-                                                        </p>
-                                                        <p className="text-caption text-gray-600">
-                                                            {booking.date} at {booking.time}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center space-x-4">
-                                                    <div className="text-right">
-                                                        <p className="text-body font-semibold text-gray-900">{booking.price}</p>
-                                                        <p className="text-xs text-gray-500">
-                                                            {booking.paymentMethod === 'wallet' ? 'Wallet Payment' :
-                                                                `${booking.deliveryPaymentType === 'cash' ? 'Cash' : 'Transfer'} on Delivery`}
-                                                        </p>
-                                                    </div>
-                                                    <UberBadge
-                                                        variant={booking.status === 'Completed' ? 'success' : 'warning'}
-                                                        size="md"
-                                                    >
-                                                        {booking.status}
-                                                    </UberBadge>
-                                                    <UberButton variant="outline" size="sm" onClick={() => { setSelectedBooking(booking); setShowBookingDetailsModal(true); }}>
-                                                        View Details
-                                                    </UberButton>
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div className="text-center py-12">
-                                            <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                                <Calendar className="h-8 w-8 text-gray-400" />
-                                            </div>
-                                            <p className="text-body text-gray-600 mb-4">No bookings found</p>
-                                            <UberButton
-                                                variant="primary"
-                                                size="md"
-                                                icon={<Calendar className="h-5 w-5" />}
-                                                onClick={() => setShowBookingModal(true)}
-                                            >
-                                                Book Your First Service
-                                            </UberButton>
-                                        </div>
-                                    )}
-                                </div>
-                            </UberCard>
-                        </div>
+                        <UserDashboardBookings
+                            userBookings={userBookings}
+                            setSelectedBooking={setSelectedBooking}
+                            setShowBookingDetailsModal={setShowBookingDetailsModal}
+                            setShowBookingModal={setShowBookingModal}
+                        />
                     )}
 
                     {activeTab === 'vehicles' && (
-                        <div className="space-y-10">
-                            <UberCard variant="elevated" padding="lg">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h3 className="text-heading font-semibold text-gray-900">My Vehicles</h3>
-                                    <UberButton
-                                        variant="primary"
-                                        size="md"
-                                        icon={<Plus className="h-5 w-5" />}
-                                        onClick={() => setShowVehicleModal(true)}
-                                    >
-                                        Add Vehicle
-                                    </UberButton>
-                                </div>
-                                <div className="space-y-6">
-                                    {vehicles.map((vehicle, index) => (
-                                        <div key={index} className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl">
-                                            <div className="flex items-center space-x-4">
-                                                <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
-                                                    <Car className="h-6 w-6 text-blue-600" />
-                                                </div>
-                                                <div>
-                                                    <p className="text-body font-semibold text-gray-900">{vehicle.name}</p>
-                                                    <p className="text-caption text-gray-600">{vehicle.licensePlate}</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center space-x-3">
-                                                <span className="text-caption text-gray-500">{vehicle.lastService}</span>
-                                                <UberButton variant="outline" size="sm">
-                                                    Edit
-                                                </UberButton>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </UberCard>
-                        </div>
+                        <UserDashboardVehicles
+                            vehicles={vehicles}
+                            setShowVehicleModal={setShowVehicleModal}
+                        />
                     )}
 
                     {activeTab === 'profile' && (
-                        <div className="space-y-10">
-                            {/* Personal Information */}
-                            <UberCard variant="elevated" padding="lg">
-                                <h3 className="text-heading font-semibold text-gray-900 mb-6">Personal Information</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Full Name</label>
-                                        <input
-                                            type="text"
-                                            defaultValue={user?.name || 'John Doe'}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Email Address</label>
-                                        <input
-                                            type="email"
-                                            defaultValue={user?.email || 'john.doe@example.com'}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Phone Number</label>
-                                        <input
-                                            type="tel"
-                                            placeholder="+234 801 234 5678"
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Date of Birth</label>
-                                        <input
-                                            type="date"
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                        />
-                                    </div>
-                                </div>
-                            </UberCard>
-
-                            {/* Address Information */}
-                            <UberCard variant="elevated" padding="lg">
-                                <h3 className="text-heading font-semibold text-gray-900 mb-6">Address Information</h3>
-                                <div className="space-y-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Street Address</label>
-                                        <input
-                                            type="text"
-                                            placeholder="123 Main Street"
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-900 mb-2">City</label>
-                                            <input
-                                                type="text"
-                                                placeholder="Lagos"
-                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-900 mb-2">State</label>
-                                            <input
-                                                type="text"
-                                                placeholder="Lagos State"
-                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-900 mb-2">Postal Code</label>
-                                            <input
-                                                type="text"
-                                                placeholder="100001"
-                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </UberCard>
-
-                            {/* Service Preferences */}
-                            <UberCard variant="elevated" padding="lg">
-                                <h3 className="text-heading font-semibold text-gray-900 mb-6">Service Preferences</h3>
-                                <div className="space-y-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Preferred Service Time</label>
-                                        <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200">
-                                            <option value="">Select preferred time</option>
-                                            <option value="morning">Morning (6:00 AM - 12:00 PM)</option>
-                                            <option value="afternoon">Afternoon (12:00 PM - 5:00 PM)</option>
-                                            <option value="evening">Evening (5:00 PM - 8:00 PM)</option>
-                                            <option value="anytime">Anytime</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Preferred Service Type</label>
-                                        <div className="space-y-3">
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                                                <span className="text-body text-gray-900">Basic Wash</span>
-                                            </label>
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
-                                                <span className="text-body text-gray-900">Premium Wash</span>
-                                            </label>
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                                                <span className="text-body text-gray-900">Full Detailing</span>
-                                            </label>
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                                                <span className="text-body text-gray-900">Interior Cleaning</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Special Instructions</label>
-                                        <textarea
-                                            placeholder="Any special instructions for your car wash services..."
-                                            rows={3}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200 resize-none"
-                                        />
-                                    </div>
-                                </div>
-                            </UberCard>
-
-                            {/* Account Settings */}
-                            <UberCard variant="elevated" padding="lg">
-                                <h3 className="text-heading font-semibold text-gray-900 mb-6">Account Settings</h3>
-                                <div className="space-y-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Language</label>
-                                        <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200">
-                                            <option value="en">English</option>
-                                            <option value="fr">French</option>
-                                            <option value="es">Spanish</option>
-                                            <option value="de">German</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">Notifications</label>
-                                        <div className="space-y-3">
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
-                                                <span className="text-body text-gray-900">Email notifications</span>
-                                            </label>
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
-                                                <span className="text-body text-gray-900">SMS notifications</span>
-                                            </label>
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" defaultChecked />
-                                                <span className="text-body text-gray-900">Push notifications</span>
-                                            </label>
-                                            <label className="flex items-center space-x-3">
-                                                <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                                                <span className="text-body text-gray-900">Marketing emails</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </UberCard>
-
-                            {/* Action Buttons */}
-                            <div className="flex space-x-4">
-                                <UberButton
-                                    variant="outline"
-                                    size="lg"
-                                    className="flex-1"
-                                >
-                                    Cancel Changes
-                                </UberButton>
-                                <UberButton
-                                    variant="primary"
-                                    size="lg"
-                                    className="flex-1"
-                                    onClick={handleProfileSave}
-                                >
-                                    Save Changes
-                                </UberButton>
-                            </div>
-                        </div>
+                        <UserDashboardProfile
+                            user={user}
+                            handleProfileSave={handleProfileSave}
+                        />
                     )}
                 </div>
             </div>

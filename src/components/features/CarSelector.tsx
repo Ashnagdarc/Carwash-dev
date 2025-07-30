@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Car, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import { CarIcon } from '../ui/CarIcons';
 import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 
@@ -58,7 +59,7 @@ export function CarSelector({ cars, selectedCar, onSelectCar, onAddCar }: CarSel
             <div className="aspect-video bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
               <div className="text-center">
                 <div className="w-32 h-20 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg flex items-center justify-center transform rotate-12">
-                  <Car className="h-12 w-12 text-white" />
+                  <CarIcon className="h-12 w-12 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">3D Car Preview</h3>
                 <p className="text-gray-600">Interactive 3D model will appear here</p>
@@ -72,11 +73,10 @@ export function CarSelector({ cars, selectedCar, onSelectCar, onAddCar }: CarSel
         {cars.map((car) => (
           <Card
             key={car.id}
-            className={`cursor-pointer transition-all duration-200 ${
-              selectedCar?.id === car.id
+            className={`cursor-pointer transition-all duration-200 ${selectedCar?.id === car.id
                 ? 'ring-2 ring-blue-500 bg-blue-50'
                 : 'hover:shadow-md'
-            }`}
+              }`}
             onClick={() => onSelectCar(car)}
           >
             <CardContent className="p-4">

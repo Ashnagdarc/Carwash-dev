@@ -1,5 +1,6 @@
 import React from 'react';
-import { Check, Star, Sparkles, Car, ShieldCheck, Clock } from 'lucide-react';
+import { Check, Star, Sparkles, ShieldCheck, Clock } from 'lucide-react';
+import { CarIcon } from '../ui/CarIcons';
 import UberCard from '../ui/UberCard';
 import UberButton from '../ui/UberButton';
 
@@ -37,7 +38,7 @@ export function ServiceCard({
   };
 
   const categoryIcons = {
-    basic: <Car className="h-8 w-8 text-gray-400" />,
+    basic: <CarIcon className="h-8 w-8 text-gray-400" />,
     premium: <Sparkles className="h-8 w-8 text-blue-400" />,
     deluxe: <ShieldCheck className="h-8 w-8 text-amber-400" />
   };

@@ -15,12 +15,12 @@ const UberCard: React.FC<UberCardProps> = ({
     onClick,
     className = '',
 }) => {
-    const baseClasses = 'bg-white border border-gray-200 rounded-2xl transition-all duration-200';
+    const baseClasses = 'bg-white border border-gray-200 rounded-2xl transition-all duration-200 hover:shadow-lg';
 
     const variantClasses = {
-        default: 'hover:shadow-lg',
-        elevated: 'shadow-lg',
-        interactive: 'hover:shadow-lg cursor-pointer',
+        default: 'shadow-md hover:shadow-lg',
+        elevated: 'shadow-xl',
+        interactive: 'shadow-md hover:shadow-xl cursor-pointer',
     };
 
     const paddingClasses = {

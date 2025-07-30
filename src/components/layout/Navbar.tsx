@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Car, Moon, Sun, User, Settings, BarChart3, Calendar, Users, Package, TrendingUp } from 'lucide-react';
+import { Menu, X, Moon, Sun, User, Settings, BarChart3, Calendar, Users, Package, TrendingUp } from 'lucide-react';
+import { CarIcon } from '../ui/CarIcons';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -60,7 +61,7 @@ export function Navbar() {
   ] : [
     { href: '/user/dashboard', label: 'My Dashboard', icon: BarChart3 },
     { href: '/user/dashboard?tab=bookings', label: 'My Bookings', icon: Calendar },
-    { href: '/user/dashboard?tab=vehicles', label: 'My Vehicles', icon: Car },
+    { href: '/user/dashboard?tab=vehicles', label: 'My Vehicles', icon: CarIcon },
     { href: '/user/dashboard?tab=profile', label: 'Profile', icon: User }
   ];
 
@@ -84,7 +85,7 @@ export function Navbar() {
           <div className="flex items-center space-x-8">
             {/* Brand Name */}
             <div className="flex items-center space-x-2 select-none">
-              <Car className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <CarIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Carwash</span>
             </div>
 
@@ -92,7 +93,7 @@ export function Navbar() {
             {isDashboard && (
               <div className="hidden md:flex items-center space-x-8">
                 <button className="flex items-center space-x-2 px-3 py-2 text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white font-medium text-base">
-                  <Car className="h-4 w-4" />
+                  <CarIcon className="h-4 w-4" />
                   <span>Service</span>
                 </button>
               </div>
@@ -221,7 +222,7 @@ export function Navbar() {
             {isDashboard && (
               <div className="flex space-x-4 mb-4">
                 <button className="flex items-center space-x-2 px-3 py-2 text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white font-medium text-base">
-                  <Car className="h-4 w-4" />
+                  <CarIcon className="h-4 w-4" />
                   <span>Service</span>
                 </button>
               </div>
